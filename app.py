@@ -1,18 +1,14 @@
+import matplotlib.pyplot as plt
 from taipy.gui import Gui
 from bokeh.plotting import figure
 from bokeh.io import output_notebook, show, push_notebook
 import cv2
 from tensorflow.keras.models import load_model
-from imutils import paths
 import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
 
 CLASSES = ["Normal", "Fire", "Accident", "Robbery"]
-# import the necessary packages
-
-# load the trained model from disk
-print("[INFO] loading model...")
 model = load_model('./models/anomaly_detection.h5')
 
 
@@ -52,40 +48,35 @@ def detect_anomaly(path):
         else:
             break
         #time.sleep(0.2)
-    print("Detected Activity: " + label)
     cap.release()
-    print("Detected activity: " + label)
+    return label
 
-detect_anomaly(input('path:'))#/content/drive/My Drive/Colab Notebooks/DATA/ROBBERY.mp4
-                    #   /content/drive/My Drive/Colab Notebooks/DATA/ACCIDENT.mp4
-
-
-
-
-
-# img_path = "placeholder_image.png"
-# content = ""
-# anomaly_class = ""
-# index = """
-# <|text-center|
-
-# <|{anomaly_class}|>
-
-# <|{content}|file_selector|extensions=.mp4|>
-# Upload the surveillance video
-
-# |>
-# """
-
-# def on_change(state, var_name, var_val):
-#     if var_name == "content":        
-#         output = detect_anomaly(var_val)
-#         state.anomaly_class = "Detected activity: " + str(output)
-#     # print(var_name, var_val)
+img_path = "placeholder_image.png"
+content = ""
+anomaly_class = ""
+index = """
+<|text-center|
 
 
-# app = Gui(page=index)
+<|{content}|file_selector|on_action=find_anomaly|extensions=.mp4|>
+Upload the surveillance video
 
-# if __name__ == '__main__':
-#     app.run(use_reloader=True)
+
+<|{anomaly_class}|>
+
+|>
+"""
+
+def find_anomaly(state, var_name, var_val):
+    if var_name == "content":
+        state.content = var_val
+        output = detect_anomaly(var_val)
+        state.anomaly_class = "Detected activity: " + str(output)
+    # print(var_name, var_val)
+
+
+app = Gui(page=index)
+
+if __name__ == '__main__':
+    app.run(use_reloader=True)
 
