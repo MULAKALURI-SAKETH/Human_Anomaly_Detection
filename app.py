@@ -51,32 +51,34 @@ def detect_anomaly(path):
     cap.release()
     return label
 
-img_path = "placeholder_image.png"
+# img_path = "placeholder_image.png"
 content = ""
 anomaly_class = ""
 index = """
 <|text-center|
 
-
-<|{content}|file_selector|on_action=find_anomaly|extensions=.mp4|>
+<|{content}|file_selector|extensions=.mp4|>
 Upload the surveillance video
 
-
-<|{anomaly_class}|>
+<|{anomaly_class}|text|>
 
 |>
 """
-
-def find_anomaly(state, var_name, var_val):
+# <|Predict|button|on_action=find_anomaly|>
+def on_change(state, var_name, var_val):
     if var_name == "content":
         state.content = var_val
+        print(var_val)
         output = detect_anomaly(var_val)
+        print(output)
         state.anomaly_class = "Detected activity: " + str(output)
     # print(var_name, var_val)
 
 
-app = Gui(page=index)
 
 if __name__ == '__main__':
+    app = Gui(page=index)
     app.run(use_reloader=True)
+#     # print("Detected activity: " + detect_anomaly(input("Upload surveillance video: ")))
 
+# print("DETECTED ACTIVITY: " + detect_anomaly(input('path: ')))
