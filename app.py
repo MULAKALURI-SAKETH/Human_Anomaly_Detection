@@ -65,11 +65,11 @@ Upload the surveillance video
 |>
 """
 # <|Predict|button|on_action=find_anomaly|>
-def on_change(state, var_name, var_val):
+def predict_anomaly(state, var_name, var_val):
     if var_name == "content":
         state.content = var_val
-        print(var_val)
         output = detect_anomaly(var_val)
+        print(var_val)
         print(output)
         state.anomaly_class = "Detected activity: " + str(output)
     # print(var_name, var_val)
