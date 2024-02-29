@@ -12,7 +12,7 @@ CLASSES = ["Normal", "Fire", "Accident", "Robbery"]
 model = load_model('./models/anomaly_detection.h5')
 
 
-# ### Prediction from Video Input
+# Prediction from Video Input
 def detect_anomaly(path):
     #Load video
     output_notebook()
@@ -51,27 +51,22 @@ def detect_anomaly(path):
     cap.release()
     return label
 
-# img_path = "placeholder_image.png"
 content = ""
 anomaly_class = ""
 index = """
 <|text-center|
 
-<|{content}|file_selector|extensions=.mp4|>
-Upload the surveillance video
+<|{content}|file_selector|label=Upload the surveillance video|extensions=.mp4|>
 
 <|{anomaly_class}|text|>
 
 |>
 """
-# <|Predict|button|on_action=find_anomaly|>
 def on_change(state, var_name, var_val):
     if var_name == "content":
         state.content = var_val
         output = detect_anomaly(var_val)
         state.anomaly_class = "Detected activity: " + str(output)
-        pass
-    state.anomaly_class = ""
 
 if __name__ == '__main__':
     app = Gui(page=index)
