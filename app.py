@@ -11,7 +11,6 @@ warnings.filterwarnings("ignore")
 CLASSES = ["Normal", "Fire", "Accident", "Robbery"]
 model = load_model('./models/anomaly_detection.h5')
 
-
 # Prediction from Video Input
 def detect_anomaly(path):
     #Load video
@@ -27,7 +26,6 @@ def detect_anomaly(path):
     myImage = p.image_rgba(image=[frame], x=0, y=0, dw=width, dh=height)
     label = ""
     show(p, notebook_handle = True)
-
     while(cap.isOpened()):
         ret, frame = cap.read()
         if ret:
@@ -37,13 +35,12 @@ def detect_anomaly(path):
             preds = model.predict(np.expand_dims(img, axis=0))[0]
             j = np.argmax(preds)
             label = CLASSES[j]
-            #print("Predicted Class : ",label)
             cv2.putText(frame, label, (35, 50), cv2.FONT_HERSHEY_SIMPLEX,1.25, (0, 255, 0), 5)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
             frame = cv2.flip(frame, 0)
             myImage.data_source.data['image'] = [frame]
             push_notebook()
-            if cv2.waitKey(1) & 0xFF == ord('q'): # press q to quit
+            if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         else:
             break
@@ -52,13 +49,18 @@ def detect_anomaly(path):
     return label
 
 content = ""
+val = 0
 anomaly_class = ""
 index = """
 <|text-center|
 
-<|{content}|file_selector|label=Upload the surveillance video|extensions=.mp4|>
 
-<|{anomaly_class}|text|>
+
+<|{content}|file_selector|label=Upload the surveillance video|extensions=.mp4|id=video-file|>
+
+
+<|{anomaly_class}|text|id=anomaly|>
+
 
 |>
 """
@@ -67,7 +69,8 @@ def on_change(state, var_name, var_val):
         state.content = var_val
         output = detect_anomaly(var_val)
         state.anomaly_class = "Detected activity: " + str(output)
-
+    # if var_name == "val":
+        # state.val = 
 if __name__ == '__main__':
-    app = Gui(page=index)
+    app = Gui(page=index, css_file="./static/css/style.css")
     app.run(use_reloader=True)
