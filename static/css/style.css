@@ -8,18 +8,10 @@ body {
   background-size: cover;
   min-height: 100vh;
   min-width: 100vw;
-  position: absolute;
+  position: relative;
   box-sizing: border-box;
 }
 
-.text-center .md-para {
-  /* width: 100vw;
-  height: 100vh; */
-  /* max-width: max-content; */
-  margin: auto;
-  align-items: center;
-  position: relative;
-}
 #anomaly {
   position: relative;
   align-items: center;
@@ -29,7 +21,7 @@ body {
   border-color: hsl(248, 83%, 14%);
   background-color: hsl(248, 83%, 14%);
   font-size: large;
-  padding: 50px;
+  padding: 20px;
 }
 #video-file-upload-file {
   position: relative;
@@ -37,4 +29,8 @@ body {
   margin: 0 auto;
   max-width: 100%;
   max-height: 100%;
+}
+
+.taipy-part {
+  max-width: 400px;
 }
