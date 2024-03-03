@@ -64,7 +64,7 @@ def on_change(state, var_name, var_val):
         state.content = var_val
         output = detect_anomaly(var_val)
         state.anomaly_class = "Detected activity: " + str(output)
-
+        
 if __name__ == '__main__':
     app = Gui(page=index, css_file='./static/css/style.css')
     app.run(use_reloader=True)
