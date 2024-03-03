@@ -32,6 +32,7 @@
 }
 
 .MuiBox-root css-0 {
+  /*the class name is .MuiBox-root.css-0 according to the html inspection*/
   width: inherit;
   align-self: center;
   margin: auto;
