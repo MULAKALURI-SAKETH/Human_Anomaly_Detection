@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Home</title>
+		<link
+			rel="stylesheet"
+			href="{{url_for('static', filename='css/bootstrap.min.css')}}"
+		/>
+	</head>
+	<body>
+		<div class="container">
+			<div class="p-5 mb-4 bg-body-tertiary rounded-3">
+				<div class="container-fluid">
+					<h1 class="mb-5 display-6">Human Anomaly Detection</h1>
+					<form method="post" action="/submit" class="w-full">
+						<div class="mb-4">
+							<label class="form-label" for="video">Upload Video File</label>
+							<input class="form-control" type="file" name="video" id="video" />
+						</div>
+						<div class="mb-1">
+							<input
+								class="btn btn-primary fw-semibold"
+								type="submit"
+								value="Upload"
+							/>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
