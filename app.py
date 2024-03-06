@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+import re
 from taipy.gui import Gui
 from bokeh.plotting import figure
 from bokeh.io import output_notebook, show, push_notebook
@@ -8,14 +8,18 @@ import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
 
+
 CLASSES = ["Normal", "Fire", "Accident", "Robbery"]
 model = load_model('./models/anomaly_detection.h5')
 
 # Prediction from Video Input
 def detect_anomaly(path):
+    # pattern = r'([0-9])'
+    # anomaly_type = re.sub(pattern, '', str(path).lower().capitalize().split('\\')[-1].split(".")[0])
+    # if anomaly_type == "Shooting":
+    #     anomaly_type = "Fire"
     #Load video
     output_notebook()
-
     cap = cv2.VideoCapture(path)
     ret, frame = cap.read()
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA) # because Bokeh expects a RGBA image
@@ -25,6 +29,7 @@ def detect_anomaly(path):
     p = figure(x_range=(0,width), y_range=(0,height), output_backend="webgl", width=700, height=400)
     myImage = p.image_rgba(image=[frame], x=0, y=0, dw=width, dh=height)
     label = ""
+    frames = []
     show(p, notebook_handle = True)
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -36,6 +41,8 @@ def detect_anomaly(path):
             j = np.argmax(preds)
             label = CLASSES[j]
             cv2.putText(frame, label, (35, 50), cv2.FONT_HERSHEY_SIMPLEX,1.25, (0, 255, 0), 5)
+            # if label == anomaly_type:
+            #     frames.append(frame)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
             frame = cv2.flip(frame, 0)
             myImage.data_source.data['image'] = [frame]
@@ -44,12 +51,11 @@ def detect_anomaly(path):
                 break
         else:
             break
-        #time.sleep(0.2)
     cap.release()
     return label
 
+
 content = ""
-val = 0
 anomaly_class = ""
 index = """
 <|text-center|
@@ -58,13 +64,15 @@ index = """
 <|{anomaly_class}|text|id=anomaly|>
 |>
 """
+
+
 def on_change(state, var_name, var_val):
     output = ""
     if var_name == "content":
         state.content = var_val
         output = detect_anomaly(var_val)
         state.anomaly_class = "Detected activity: " + str(output)
-        
+
 if __name__ == '__main__':
     app = Gui(page=index, css_file='./static/css/style.css')
     app.run(use_reloader=True)
