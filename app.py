@@ -10,14 +10,9 @@ warnings.filterwarnings("ignore")
 
 
 CLASSES = ["Normal", "Fire", "Accident", "Robbery"]
-model = load_model('./models/anomaly_detection.h5')
-
+model = load_model('./models/anomaly_detection.keras')
 # Prediction from Video Input
 def detect_anomaly(path):
-    # pattern = r'([0-9])'
-    # anomaly_type = re.sub(pattern, '', str(path).lower().capitalize().split('\\')[-1].split(".")[0])
-    # if anomaly_type == "Shooting":
-    #     anomaly_type = "Fire"
     #Load video
     output_notebook()
     cap = cv2.VideoCapture(path)
@@ -41,8 +36,6 @@ def detect_anomaly(path):
             j = np.argmax(preds)
             label = CLASSES[j]
             cv2.putText(frame, label, (35, 50), cv2.FONT_HERSHEY_SIMPLEX,1.25, (0, 255, 0), 5)
-            # if label == anomaly_type:
-            #     frames.append(frame)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
             frame = cv2.flip(frame, 0)
             myImage.data_source.data['image'] = [frame]
@@ -59,12 +52,13 @@ content = ""
 anomaly_class = ""
 index = """
 <|text-center|
-<|{content}|file_selector|label=Upload the surveillance video|extensions=.mp4|id=video-file|>
+<|{content}|file_selector|extensions=.mp4|id=video-file|>
+Upload the surveillance video
 
 <|{anomaly_class}|text|id=anomaly|>
 |>
 """
-
+app = Gui(page=index, css_file='./static/css/style.css')
 
 def on_change(state, var_name, var_val):
     output = ""
@@ -74,5 +68,4 @@ def on_change(state, var_name, var_val):
         state.anomaly_class = "Detected activity: " + str(output)
 
 if __name__ == '__main__':
-    app = Gui(page=index, css_file='./static/css/style.css')
     app.run(use_reloader=True)

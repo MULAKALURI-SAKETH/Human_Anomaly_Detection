@@ -15,7 +15,7 @@
 
 #anomaly {
   border-style: solid;
-  position: absolute;
+  position: relative;
   margin: auto;
   top: 300px;
   border-color: hsl(248, 82%, 11%);
