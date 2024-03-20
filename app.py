@@ -1,4 +1,3 @@
-import re
 from taipy.gui import Gui
 from bokeh.plotting import figure
 from bokeh.io import output_notebook, show, push_notebook
@@ -24,7 +23,6 @@ def detect_anomaly(path):
     p = figure(x_range=(0,width), y_range=(0,height), output_backend="webgl", width=700, height=400)
     myImage = p.image_rgba(image=[frame], x=0, y=0, dw=width, dh=height)
     label = ""
-    frames = []
     show(p, notebook_handle = True)
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -45,6 +43,7 @@ def detect_anomaly(path):
         else:
             break
     cap.release()
+    
     return label
 
 
@@ -68,4 +67,4 @@ def on_change(state, var_name, var_val):
         state.anomaly_class = "Detected activity: " + str(output)
 
 if __name__ == '__main__':
-    app.run(use_reloader=True)
+    app.run(use_reloader=True, title="CCTV Anomaly")
